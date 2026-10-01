@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hood Shambani</title>
+<meta name="theme-color" content="#176b35">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f8f3;color:#18351f}
+header{background:linear-gradient(135deg,#176b35,#2f9e55);color:white;padding:22px 18px;border-radius:0 0 24px 24px}
+header h1{margin:0 0 6px;font-size:28px}header p{margin:0;opacity:.9}
+main{max-width:720px;margin:auto;padding:16px}.card{background:white;border-radius:18px;padding:17px;margin:12px 0;box-shadow:0 4px 14px #0000000d}
+h2{margin:4px 0 12px}.muted{color:#66766b;font-size:14px}
+label{display:block;font-weight:bold;margin:13px 0 6px}input,select,textarea{width:100%;padding:12px;border:1px solid #d7e2d8;border-radius:11px;font-size:15px}
+button{border:0;border-radius:12px;padding:12px 16px;background:#208844;color:white;font-weight:bold;font-size:15px;cursor:pointer;margin-top:12px}
+button.secondary{background:#e7f2e9;color:#176b35}.preview{width:100%;max-height:320px;object-fit:cover;border-radius:15px;margin-top:12px;display:none}
+.result{border-left:5px solid #2f9e55;background:#f0f8f1;padding:14px;border-radius:12px;margin-top:15px;display:none}
+.badge{display:inline-block;background:#dff2e3;color:#176b35;padding:5px 9px;border-radius:20px;font-size:13px;font-weight:bold}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.step{padding:10px 0;border-bottom:1px solid #edf1ed}.step:last-child{border-bottom:0}
+nav{position:sticky;bottom:0;background:white;padding:10px;border-top:1px solid #dde6df;display:flex;justify-content:space-around}
+nav button{margin:0;background:transparent;color:#176b35;padding:8px;font-size:13px}.hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+<h1>🌱 HOOD SHAMBANI</h1>
+<p>Teknolojia kwa mkulima wa kisasa.</p>
+</header>
+
+<main>
+<section id="home" class="card">
+<h2>📊 Dashboard</h2>
+<div class="grid">
+<div class="card"><b>🌾 Mashamba</b><br><span class="muted">Simamia mashamba yako</span></div>
+<div class="card"><b>📅 Ratiba</b><br><span class="muted">Kumbukumbu za kilimo</span></div>
+<div class="card"><b>🌦️ Hali ya hewa</b><br><span class="muted">Angalia hali ya eneo</span></div>
+<div class="card"><b>💰 Faida</b><br><span class="muted">Hesabu gharama na faida</span></div>
+</div>
+<h2>Karibu Hood Shambani</h2>
+<p class="muted">Msaidizi wako wa kilimo kwa Kiswahili.</p>
+<div class="grid">
+<button onclick="show('diagnosis')">📷 Tambua Tatizo</button>
+<button onclick="show('farms')">🌾 Mashamba Yangu</button>
+<button onclick="show('calendar')">📅 Kalenda</button>
+<button onclick="show('reminders')">🔔 Vikumbusho</button>
+<button onclick="show('weather')">🌦️ Hali ya Hewa</button>
+<button onclick="show('smart')">🧠 Smart Alerts</button>
+<button onclick="show('role')">👥 Mtumiaji</button>
+<button onclick="show('market')">🛒 Soko la Mazao</button>
+<button onclick="show('profit')">💰 Gharama & Faida</button>
+<button onclick="show('profile')">👤 Akaunti</button>
+</div>
+</section>
+
+<section id="diagnosis" class="card">
+<h2>📷 Tambua Tatizo la Mmea</h2>
+<p class="muted">Piga picha au chagua picha ya jani/mmea. Kisha tupe taarifa chache.</p>
+
+<label>Picha ya mmea</label>
+<input id="photo" type="file" accept="image/*" capture="environment" onchange="previewPhoto()">
+<img id="preview" class="preview">
+
+<label>Zao</label>
+<select id="crop">
+<option value="">-- Chagua zao --</option>
+<option>Nyanya</option><option>Mahindi</option><option>Maharage</option>
+<option>Mpunga</option><option>Viazi</option><option>Alizeti</option>
+<option>Vitunguu</option>
+</select>
+
+<label>Umri wa mmea</label>
+<input id="age" type="text" placeholder="Mfano: wiki 4">
+
+<label>Dalili unazoona</label>
+<textarea id="symptoms" rows="3" placeholder="Mfano: majani yana madoa ya kahawia na yanakunjamana"></textarea>
+
+<button onclick="analyze()">🔎 Chambua Mmea</button>
+
+<div id="result" class="result">
+<div class="badge">DEMO YA HOOD SHAMBANI</div>
+<h3 id="problem"></h3>
+<p id="confidence"></p>
+<strong>Hatua za kuanza kuchukua:</strong>
+<div id="steps"></div>
+<p class="muted"><b>Kumbuka:</b> Hii ni prototype ya majaribio, si utambuzi wa kitaalamu. Mfumo halisi wa AI utaunganishwa baadaye.</p>
+</div>
+</section>
+
+
+
+
+
+
+
+
+
+<section id="role" class="card hidden">
+<h2>👥 Chagua Aina ya Mtumiaji</h2>
+<p class="muted">Hii itasaidia Hood Shambani kuonyesha huduma zinazomfaa kila mtumiaji.</p>
+<div class="grid">
+<button onclick="setRole('Mkulima')">🌾 Mimi ni Mkulima</button>
+<button onclick="setRole('Mnunuzi')">🛒 Mimi ni Mnunuzi</button>
+</div>
+<div id="roleResult" class="result"></div>
+</section>
+
+<section id="smart" class="card hidden">
+<h2>🧠 Smart Alerts</h2>
+<p class="muted">Hood Shambani inaunganisha ratiba ya shamba, vikumbusho na taarifa za mvua ili kukusaidia kupanga kazi.</p>
+<button onclick="generateSmartAlert()">🤖 Tengeneza Ushauri wa Leo</button>
+<div id="smartResult" class="result"></div>
+</section>
+
+<section id="weather" class="card hidden">
+<h2>🌦️ Hali ya Hewa</h2>
+<p class="muted">Tumia eneo la simu kupata hali ya hewa. Internet na ruhusa ya location vinahitajika.</p>
+<button onclick="getWeather()">📍 Pata Hali ya Eneo Langu</button>
+<div id="weatherNow" class="result"></div>
+<div id="forecast"></div>
+</section>
+
+<section id="reminders" class="card hidden">
+<h2>🔔 Vikumbusho vya Kilimo</h2>
+<p class="muted">Weka ukumbusho wa kazi muhimu na ufuatilie kazi zinazokaribia.</p>
+<label>Kazi</label><input id="reminderTask" placeholder="Mfano: Palizi ya kwanza">
+<div class="grid">
+<div><label>Tarehe</label><input id="reminderDate" type="date"></div>
+<div><label>Muda</label><input id="reminderTime" type="time"></div>
+</div>
+<label>Shamba</label><input id="reminderFarm" placeholder="Mfano: Shamba la Mlimani">
+<button onclick="addReminder()">🔔 Weka Ukumbusho</button>
+<div id="reminderList"></div>
+</section>
+
+<section id="calendar" class="card hidden">
+<h2>📅 Kalenda ya Kilimo</h2>
+<p class="muted">Chagua shamba, Hood Shambani ikupangie hatua muhimu kuanzia kupanda hadi kuvuna.</p>
+<label>Chagua shamba</label>
+<select id="calendarFarm" onchange="renderCalendar()"></select>
+<div id="calendarList"></div>
+</section>
+
+<section id="farms" class="card hidden">
+<h2>🌾 Mashamba Yangu</h2>
+<p class="muted">Ongeza na fuatilia mashamba yako kwenye simu hii.</p>
+<label>Jina la shamba</label><input id="farmName" placeholder="Mfano: Shamba la Mlimani">
+<label>Eneo</label><input id="farmLocation" placeholder="Mfano: Ubaruku">
+<div class="grid">
+<div><label>Ukubwa (eka)</label><input id="farmSize" type="number" step="0.1" placeholder="Mfano: 2"></div>
+<div><label>Tarehe ya kupanda</label><input id="plantDate" type="date"></div>
+</div>
+<label>Zao</label>
+<select id="farmCrop">
+<option value="">-- Chagua zao --</option>
+<option>Mahindi</option><option>Maharage</option><option>Mpunga</option>
+<option>Viazi</option><option>Alizeti</option><option>Nyanya</option>
+<option>Vitunguu</option>
+</select>
+<button onclick="addFarm()">➕ Ongeza Shamba</button>
+<div id="farmList"></div>
+</section>
+
+<section id="profile" class="card hidden">
+<h2>👤 Akaunti ya Mkulima</h2>
+<p class="muted">Taarifa hizi zitahifadhiwa kwenye Hood Shambani kupitia akaunti yako.</p>
+<label>Jina la mkulima</label><input id="farmerName" placeholder="Mfano: Juma">
+<label>Namba ya simu</label><input id="phone" type="tel" placeholder="Mfano: 07XXXXXXXX">
+<label>Mkoa</label><input id="region" placeholder="Mfano: Mbeya">
+<label>Wilaya</label><input id="district" placeholder="Mfano: Mbarali">
+<label>Kijiji</label><input id="village" placeholder="Mfano: Ubaruku">
+<label>Zao kuu</label>
+<select id="farmingType"><option>-- Chagua --</option><option>Mahindi</option><option>Maharage</option><option>Mpunga</option><option>Mboga</option><option>Matunda</option><option>Vitunguu</option><option>Alizeti</option><option>Mchanganyiko</option></select>
+<button onclick="saveProfile()">💾 Hifadhi Taarifa</button>
+<div id="profileResult" class="result"></div>
+<hr style="margin:22px 0;border:0;border-top:1px solid #ddd">
+<button class="secondary" onclick="logoutUser()">🚪 Toka kwenye akaunti</button>
+<div class="muted" style="margin-top:8px">Utapelekwa kwenye ukurasa wa kuingia baada ya kutoka.</div>
+</section>
+
+<section id="profit" class="card hidden">
+<h2>💰 Gharama & Faida</h2>
+<p class="muted">Hesabu makadirio ya faida ya zao lako.</p>
+<label>Jina la zao</label><input id="cropName" placeholder="Mfano: Mahindi">
+<label>Gharama zote (TSh)</label><input id="cost" type="number" placeholder="Mfano: 350000">
+<label>Kiasi utakachouza</label><input id="yield" type="number" placeholder="Mfano: 40">
+<label>Bei kwa unit (TSh)</label><input id="unitPrice" type="number" placeholder="Mfano: 18000">
+<button onclick="calcProfit()">🧮 Hesabu Faida</button>
+<div id="profitResult" class="result"></div>
+</section>
+
+<section id="market" class="card hidden">
+<h2>🛒 Soko la Mazao</h2>
+<p class="muted">Prototype ya kuuza mazao moja kwa moja.</p>
+<label>Zao unalouza</label><input id="product" placeholder="Mfano: Mahindi">
+<label>Kiasi</label><input id="quantity" placeholder="Mfano: debe 20">
+<label>Bei kwa unit</label><input id="price" type="number" placeholder="Mfano: 12000">
+<label>Mahali</label><input id="place" placeholder="Mfano: Mbeya">
+<label>Simu ya mawasiliano</label><input id="sellerPhone" type="tel" placeholder="07XXXXXXXX">
+<button onclick="postProduct()">📢 Weka Sokoni</button>
+<hr style="border:0;border-top:1px solid #edf1ed;margin:18px 0">
+<label>🔎 Tafuta zao</label><input id="marketSearch" oninput="renderMarket()" placeholder="Mfano: mahindi">
+<div id="list"></div>
+</section>
+</main>
+
+<nav>
+<button onclick="show('home')">🏠 Mwanzo</button>
+<button onclick="show('diagnosis')">📷 Tatua</button>
+<button onclick="show('market')">🛒 Soko</button>
+<button onclick="show('profit')">💰 Faida</button>
+<button onclick="show('farms')">🌾 Mashamba</button>
+<button onclick="show('calendar')">📅 Ratiba</button>
+<button onclick="show('reminders')">🔔 Kumbusho</button>
+<button onclick="show('weather')">🌦️ Hewa</button>
+<button onclick="show('smart')">🧠 Ushauri</button>
+<button onclick="show('role')">👥 Mimi</button>
+<button onclick="show('profile')">👤 Mimi</button>
+</nav>
+
+
+<section id="page-auth" class="card" style="max-width:720px;margin:18px auto;display:none;">
+<h2>🔐 Hood Shambani</h2>
+<p class="muted">Ingia au fungua akaunti yako ili kutumia huduma zote za Hood Shambani.</p>
+<div class="grid">
+<button id="registerTab" onclick="showAuthMode('register')">📝 Jisajili</button>
+<button id="loginTab" class="secondary" onclick="showAuthMode('login')">➡️ Ingia</button>
+</div>
+<div id="registerBox">
+<label>Jina kamili</label><input id="authName" type="text" placeholder="Mfano: Juma Mwakalobo">
+<label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="Mfano: juma@email.com">
+<label>Password</label><input id="authPassword" type="password" autocomplete="new-password" placeholder="Angalau herufi 6">
+<label>Thibitisha password</label><input id="authPassword2" type="password" autocomplete="new-password" placeholder="Rudia password">
+<label>Aina ya mtumiaji</label>
+<select id="authRole"><option value="Mkulima">🌾 Mkulima</option><option value="Mnunuzi">🛒 Mnunuzi</option></select>
+<button onclick="registerUser()">📝 Fungua Akaunti</button>
+</div>
+<div id="loginBox" style="display:none">
+<label>Email</label><input id="loginEmail" type="email" autocomplete="email" placeholder="Email yako">
+<label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password yako">
+<button onclick="loginUser()">➡️ Ingia</button>
+</div>
+<div id="authStatus" style="margin-top:14px"></div>
+<div id="installBox" style="display:none;margin-top:14px">
+  <button id="installBtn" onclick="installHoodApp()">📲 Install Hood Shambani</button>
+  <div class="muted" style="margin-top:8px">Weka Hood Shambani kwenye simu yako kama application.</div>
+</div>
+</section>
+<script>
+function show(id){
+ document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+ window.scrollTo(0,0);
+}
+function previewPhoto(){
+ const f=document.getElementById('photo').files[0], img=document.getElementById('preview');
+ if(f){img.src=URL.createObjectURL(f);img.style.display='block';}
+}
+function analyze(){
+ const crop=document.getElementById('crop').value;
+ const symptoms=document.getElementById('symptoms').value.toLowerCase();
+ if(!crop || !symptoms){alert('Tafadhali chagua zao na andika dalili unazoona.');return;}
+ let p='Tatizo linalowezekana: linahitaji uchunguzi zaidi';
+ let c='Uhakika wa demo: 50%';
+ let steps=['Ondoa majani yaliyoathirika sana na yaweke mbali na shamba.','Epuka kumwagilia juu ya majani; mwagilia chini karibu na mizizi.','Piga picha iliyo wazi zaidi ya jani, upande wa juu na chini, kwa uchunguzi wa mfumo halisi.'];
+ if(symptoms.includes('madoa')||symptoms.includes('kahawia')||symptoms.includes('nyeusi')){
+   p='Inaweza kufanana na ugonjwa wa madoa ya majani';
+   c='Uhakika wa demo: 70%';
+   steps=['Kagua majani yote na kama madoa yanaongezeka.','Ondoa mabaki ya mimea yenye ugonjwa.','Epuka unyevunyevu wa majani kwa muda mrefu.'];
+ } else if(symptoms.includes('njano')||symptoms.includes('manjano')){
+   p='Inaweza kuhusiana na upungufu wa virutubisho au tatizo la mizizi';
+   c='Uhakika wa demo: 65%';
+   steps=['Kagua unyevu wa udongo na mifereji ya maji.','Angalia mizizi na dalili nyingine kwenye mmea.','Usiongeze mbolea bila kuthibitisha chanzo cha njano.'];
+ } else if(symptoms.includes('wadudu')||symptoms.includes('mdudu')){
+   p='Inaweza kuwa mashambulizi ya wadudu';
+   c='Uhakika wa demo: 68%';
+   steps=['Kagua chini ya majani na machipukizi.','Tazama kama kuna mayai, utando au wadudu wadogo.','Piga picha ya mdudu kwa utambuzi sahihi zaidi.'];
+ }
+ document.getElementById('problem').textContent=p;
+ document.getElementById('confidence').textContent=c;
+ document.getElementById('steps').innerHTML=steps.map((x,i)=>`<div class="step">${i+1}. ${x}</div>`).join('');
+ document.getElementById('result').style.display='block';
+}
+
+
+
+
+
+
+
+
+function setRole(role){
+ localStorage.setItem('hoodRole',role);
+ const box=document.getElementById('roleResult');
+ box.style.display='block';
+ if(role==='Mkulima'){
+   box.innerHTML='<b>🌾 Umechagua: Mkulima</b><br>Utaweza kusimamia mashamba, ratiba, vikumbusho, hali ya hewa na kuuza mazao.';
+ }else{
+   box.innerHTML='<b>🛒 Umechagua: Mnunuzi</b><br>Utaweza kutafuta mazao sokoni, kuona bei na kuwasiliana na wauzaji.';
+ }
+}
+function loadRole(){
+ const role=localStorage.getItem('hoodRole');
+ if(role){
+  const box=document.getElementById('roleResult'); box.style.display='block';
+  box.innerHTML=`<b>👤 Aina yako: ${role}</b><br>Unaweza kubadilisha kwa kuchagua kitufe kingine.`;
+ }
+}
+loadRole();
+
+function generateSmartAlert(){
+ const farms=JSON.parse(localStorage.getItem('hoodFarms')||'[]');
+ const reminders=JSON.parse(localStorage.getItem('hoodReminders')||'[]');
+ const box=document.getElementById('smartResult');
+ box.style.display='block';
+ if(!farms.length){
+  box.innerHTML='<b>🌾 Anza kwa kuongeza shamba.</b><br>Hood Shambani itahitaji taarifa ya zao na tarehe ya kupanda ili kutoa ushauri wa kibinafsi.';
+  return;
+ }
+ const f=farms[0];
+ const today=new Date(); today.setHours(0,0,0,0);
+ const upcoming=reminders.filter(r=>new Date(r.date+'T00:00:00')>=today).sort((a,b)=>a.date.localeCompare(b.date))[0];
+ const planted=new Date(f.date+'T00:00:00');
+ const days=Math.max(0,Math.floor((today-planted)/86400000));
+ let message=`🌱 <b>${f.crop}</b> — ${f.name}<br>⏱️ Takriban siku <b>${days}</b> tangu kupanda.<br>`;
+ if(upcoming) message+=`🔔 Kazi inayofuata: <b>${upcoming.task}</b> tarehe ${upcoming.date} saa ${upcoming.time}.<br>`;
+ message+=`💡 Kagua unyevu wa udongo, magugu, wadudu na dalili za magonjwa kabla ya kufanya uamuzi wa kutumia dawa au mbolea.`;
+ box.innerHTML=message;
+}
+
+async function getWeather(){
+ const now=document.getElementById('weatherNow'), fc=document.getElementById('forecast');
+ now.style.display='block'; now.innerHTML='⏳ Inatafuta eneo na hali ya hewa...'; fc.innerHTML='';
+ if(!navigator.geolocation){now.innerHTML='Simu/browser hii haisapoti location.';return;}
+ navigator.geolocation.getCurrentPosition(async pos=>{
+  const lat=pos.coords.latitude, lon=pos.coords.longitude;
+  try{
+   const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,rain,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,rain_sum&timezone=auto`;
+   const r=await fetch(url); const d=await r.json();
+   now.innerHTML=`<b>📍 Eneo lako</b><br>🌡️ ${d.current.temperature_2m}°C · 💧 ${d.current.relative_humidity_2m}%<br>🌧️ Mvua sasa: ${d.current.rain} mm · 💨 Upepo: ${d.current.wind_speed_10m} km/h`;
+   let advice='Kagua shamba na endelea kufuatilia mabadiliko.';
+   const rain=d.daily.precipitation_probability_max[0]||0;
+   if(rain>=60) advice='🌧️ Kuna uwezekano mkubwa wa mvua. Epuka kunyunyizia dawa wakati mvua iko karibu na hakikisha mifereji iko wazi.';
+   else if(rain<=20) advice='☀️ Uwezekano wa mvua ni mdogo. Fuatilia unyevu wa udongo na panga umwagiliaji inapohitajika.';
+   fc.innerHTML=`<div class="result" style="display:block"><b>💡 Ushauri wa leo:</b> ${advice}</div><h3>📅 Siku 7 zijazo</h3>`+
+    d.daily.time.map((day,i)=>`<div class="step"><b>${day}</b> — 🌡️ ${d.daily.temperature_2m_min[i]}–${d.daily.temperature_2m_max[i]}°C · 🌧️ ${d.daily.precipitation_probability_max[i]}% · ${d.daily.rain_sum[i]} mm</div>`).join('');
+  }catch(e){now.innerHTML='Imeshindikana kupata hali ya hewa. Hakikisha internet ipo.';}
+ },()=>{now.style.display='block';now.innerHTML='Ruhusu location kwenye browser ili kupata hali ya hewa ya eneo lako.'},{enableHighAccuracy:false,timeout:10000});
+}
+
+function addReminder(){
+ const task=document.getElementById('reminderTask').value.trim();
+ const date=document.getElementById('reminderDate').value;
+ const time=document.getElementById('reminderTime').value;
+ const farm=document.getElementById('reminderFarm').value.trim();
+ if(!task||!date||!time||!farm){alert('Jaza taarifa zote za ukumbusho.');return;}
+ const arr=JSON.parse(localStorage.getItem('hoodReminders')||'[]');
+ arr.unshift({task,date,time,farm});
+ localStorage.setItem('hoodReminders',JSON.stringify(arr));
+ document.getElementById('reminderTask').value='';
+ document.getElementById('reminderDate').value='';
+ document.getElementById('reminderTime').value='';
+ document.getElementById('reminderFarm').value='';
+ renderReminders();
+}
+function renderReminders(){
+ const arr=JSON.parse(localStorage.getItem('hoodReminders')||'[]');
+ const box=document.getElementById('reminderList');
+ if(!arr.length){box.innerHTML='<div class="result" style="display:block">Bado hakuna vikumbusho.</div>';return;}
+ const today=new Date(); today.setHours(0,0,0,0);
+ box.innerHTML=arr.map((r,i)=>{
+   const d=new Date(r.date+'T00:00:00'); d.setHours(0,0,0,0);
+   const diff=Math.round((d-today)/86400000);
+   let status=diff<0?'⚠️ Imepita':diff===0?'🔴 Leo':diff===1?'🟠 Kesho':`🟢 Zimebaki siku ${diff}`;
+   return `<div class="card"><b>🔔 ${r.task}</b><br>🌾 ${r.farm}<br>📅 ${r.date} · ⏰ ${r.time}<br>${status}
+   <br><button class="secondary" onclick="deleteReminder(${i})">🗑️ Ondoa</button></div>`;
+ }).join('');
+}
+function deleteReminder(i){
+ const arr=JSON.parse(localStorage.getItem('hoodReminders')||'[]');
+ arr.splice(i,1); localStorage.setItem('hoodReminders',JSON.stringify(arr)); renderReminders();
+}
+renderReminders();
+
+const cropSchedules={
+ 'Mahindi':[['Siku 0','Kupanda','Panda kwenye udongo wenye unyevu unaofaa.'],['Siku 7','Kagua uotaji','Angalia nafasi zilizo wazi na afya ya miche.'],['Siku 21','Palizi ya kwanza','Ondoa magugu yanayoshindana na miche.'],['Siku 30','Lishe','Kagua ukuaji na mahitaji ya virutubisho kulingana na ushauri wa eneo.'],['Siku 60','Kagua maua','Fuatilia wadudu na dalili za magonjwa.'],['Siku 100','Kagua ukomavu','Angalia dalili za kukomaa kabla ya kuvuna.']],
+ 'Maharage':[['Siku 0','Kupanda','Panda kwenye udongo wenye unyevu unaofaa.'],['Siku 14','Palizi','Ondoa magugu mapema.'],['Siku 30','Kagua maua','Fuatilia wadudu na magonjwa.'],['Siku 60','Kagua mikunde','Angalia ukomavu wa mikunde.'],['Siku 75','Mavuno','Vuna kulingana na ukomavu wa zao.']],
+ 'Mpunga':[['Siku 0','Kupanda','Anza kwa maandalizi sahihi ya shamba na maji.'],['Siku 21','Palizi','Ondoa magugu na kagua miche.'],['Siku 45','Lishe','Kagua ukuaji na mahitaji ya virutubisho.'],['Siku 75','Kagua maua','Fuatilia wadudu na magonjwa.'],['Siku 110','Ukomavu','Andaa mavuno kulingana na hali ya zao.']],
+ 'Nyanya':[['Siku 0','Kupanda/kupandikiza','Hakikisha miche ina maji na nafasi nzuri.'],['Siku 14','Palizi','Ondoa magugu na kagua majani.'],['Siku 30','Kufuatilia wadudu','Kagua chini ya majani na dalili za magonjwa.'],['Siku 50','Maua','Fuatilia maua na ukuaji wa matunda.'],['Siku 80','Mavuno','Vuna matunda yaliyofikia ukomavu unaotakiwa.']],
+ 'Viazi':[['Siku 0','Kupanda','Tumia mbegu bora na udongo unaopitisha maji.'],['Siku 21','Palizi','Ondoa magugu na kagua miche.'],['Siku 35','Kukinga udongo','Fuatilia unyevu na afya ya mimea.'],['Siku 80','Kagua mizizi','Angalia maendeleo ya viazi.'],['Siku 100','Mavuno','Vuna kulingana na ukomavu.']],
+ 'Alizeti':[['Siku 0','Kupanda','Panda kwenye udongo wenye unyevu unaofaa.'],['Siku 20','Palizi','Ondoa magugu mapema.'],['Siku 45','Kagua maua','Fuatilia wadudu na afya ya mmea.'],['Siku 90','Ukomavu','Angalia kichwa na mbegu kwa dalili za ukomavu.']],
+ 'Vitunguu':[['Siku 0','Kupanda/kupandikiza','Hakikisha miche ina nafasi na unyevu unaofaa.'],['Siku 21','Palizi','Ondoa magugu bila kuharibu mimea.'],['Siku 45','Kagua magonjwa','Fuatilia majani na shina.'],['Siku 90','Ukomavu','Punguza umwagiliaji inapofaa na fuatilia ukomavu.']]
+};
+function datePlus(date,days){
+ const d=new Date(date+'T00:00:00'); d.setDate(d.getDate()+days);
+ return d.toLocaleDateString('sw-TZ',{day:'2-digit',month:'2-digit',year:'numeric'});
+}
+function loadCalendarFarms(){
+ const farms=JSON.parse(localStorage.getItem('hoodFarms')||'[]');
+ const sel=document.getElementById('calendarFarm');
+ if(!farms.length){sel.innerHTML='<option>-- Ongeza shamba kwanza --</option>';document.getElementById('calendarList').innerHTML='<div class="result" style="display:block">Nenda <b>Mashamba Yangu</b> kuongeza shamba.</div>';return;}
+ sel.innerHTML=farms.map((f,i)=>`<option value="${i}">${f.name} — ${f.crop}</option>`).join('');
+ renderCalendar();
+}
+function renderCalendar(){
+ const farms=JSON.parse(localStorage.getItem('hoodFarms')||'[]');
+ const i=Number(document.getElementById('calendarFarm').value);
+ const f=farms[i]; if(!f)return;
+ const schedule=cropSchedules[f.crop]||[['Siku 0','Kupanda','Anza na maandalizi ya shamba.'],['Baadaye','Ufuatiliaji','Kagua maji, magugu, wadudu na magonjwa mara kwa mara.']];
+ document.getElementById('calendarList').innerHTML=
+ `<div class="result" style="display:block"><b>🌱 ${f.crop}</b><br>📍 ${f.location} · ${f.size} eka<br>📅 Ilipandwa: ${f.date}</div>`+
+ schedule.map(x=>{const n=parseInt(x[0])||0;return `<div class="step"><b>📅 ${datePlus(f.date,n)} — ${x[1]}</b><br><span class="muted">${x[2]}</span></div>`}).join('');
+}
+loadCalendarFarms();
+
+function addFarm(){
+ const f={
+  name:document.getElementById('farmName').value.trim(),
+  location:document.getElementById('farmLocation').value.trim(),
+  size:Number(document.getElementById('farmSize').value),
+  date:document.getElementById('plantDate').value,
+  crop:document.getElementById('farmCrop').value
+ };
+ if(!f.name||!f.location||!f.size||!f.date||!f.crop){
+  alert('Tafadhali jaza taarifa zote za shamba.'); return;
+ }
+ const farms=JSON.parse(localStorage.getItem('hoodFarms')||'[]');
+ farms.unshift(f);
+ localStorage.setItem('hoodFarms',JSON.stringify(farms));
+ ['farmName','farmLocation','farmSize','plantDate'].forEach(id=>document.getElementById(id).value='');
+ document.getElementById('farmCrop').value='';
+ renderFarms();
+ loadCalendarFarms();
+}
+function renderFarms(){
+ const farms=JSON.parse(localStorage.getItem('hoodFarms')||'[]');
+ const box=document.getElementById('farmList');
+ if(!farms.length){
+  box.innerHTML='<div class="result" style="display:block">Bado hujaongeza shamba. Bonyeza <b>Ongeza Shamba</b> kuanza.</div>';
+  return;
+ }
+ const today=new Date();
+ box.innerHTML=farms.map((f,i)=>{
+  const planted=new Date(f.date+'T00:00:00');
+  const days=Math.max(0,Math.floor((today-planted)/86400000));
+  return `<div class="card">
+   <h3>🌾 ${f.name}</h3>
+   <p>📍 ${f.location} &nbsp; | &nbsp; 📐 ${f.size} eka</p>
+   <p>🌱 Zao: <b>${f.crop}</b></p>
+   <p>📅 Kupanda: ${f.date} &nbsp; | &nbsp; ⏱️ Takriban siku ${days} tangu kupanda</p>
+   <button class="secondary" onclick="deleteFarm(${i})">🗑️ Ondoa</button>
+  </div>`;
+ }).join('');
+}
+function deleteFarm(i){
+ const farms=JSON.parse(localStorage.getItem('hoodFarms')||'[]');
+ if(confirm('Una uhakika unataka kuondoa shamba hili?')){
+  farms.splice(i,1); localStorage.setItem('hoodFarms',JSON.stringify(farms)); renderFarms(); loadCalendarFarms();
+ }
+}
+renderFarms();
+
+async function saveProfile(){
+ const user=(await supabaseClient.auth.getUser()).data.user;
+ if(!user){alert('Tafadhali ingia kwanza kwenye akaunti yako.');return;}
+ const data={
+  user_id:user.id,
+  jina_la_mkulima:document.getElementById('farmerName').value.trim(),
+  namba_ya_simu:document.getElementById('phone').value.trim(),
+  mkoa:document.getElementById('region').value.trim(),
+  wilaya:document.getElementById('district').value.trim(),
+  kijiji:document.getElementById('village').value.trim(),
+  zao_kuu:document.getElementById('farmingType').value
+ };
+ if(!data.jina_la_mkulima||!data.namba_ya_simu||!data.mkoa||!data.wilaya||!data.kijiji||data.zao_kuu==='-- Chagua --'){
+  alert('Tafadhali jaza taarifa zote.'); return;
+ }
+ const {error}=await supabaseClient.from('wakulima').upsert(data,{onConflict:'user_id'});
+ if(error){
+  document.getElementById('profileResult').style.display='block';
+  document.getElementById('profileResult').innerHTML='<b>❌ Imeshindikana kuhifadhi.</b><br>'+error.message;
+  return;
+ }
+ localStorage.setItem('hoodProfile',JSON.stringify(data));
+ document.getElementById('profileResult').style.display='block';
+ document.getElementById('profileResult').innerHTML=
+ `<b>✅ Taarifa zimehifadhiwa online, ${data.jina_la_mkulima} 👋</b><br>📍 ${data.kijiji}, ${data.wilaya}, ${data.mkoa}<br>🌱 ${data.zao_kuu}`;
+}
+async function loadProfile(){
+ const user=(await supabaseClient.auth.getUser()).data.user;
+ if(!user)return;
+ const {data,error}=await supabaseClient.from('wakulima').select('jina_la_mkulima,namba_ya_simu,mkoa,wilaya,kijiji,zao_kuu').eq('user_id',user.id).maybeSingle();
+ if(error||!data)return;
+ document.getElementById('farmerName').value=data.jina_la_mkulima||'';
+ document.getElementById('phone').value=data.namba_ya_simu||'';
+ document.getElementById('region').value=data.mkoa||'';
+ document.getElementById('district').value=data.wilaya||'';
+ document.getElementById('village').value=data.kijiji||'';
+ document.getElementById('farmingType').value=data.zao_kuu||'-- Chagua --';
+}
+loadProfile();
+
+function calcProfit(){
+ const name=document.getElementById('cropName').value;
+ const cost=Number(document.getElementById('cost').value);
+ const y=Number(document.getElementById('yield').value);
+ const price=Number(document.getElementById('unitPrice').value);
+ if(!name||cost<=0||y<=0||price<=0){alert('Jaza taarifa zote kwa usahihi.');return;}
+ const revenue=y*price, profit=revenue-cost, margin=(profit/revenue)*100;
+ document.getElementById('profitResult').style.display='block';
+ document.getElementById('profitResult').innerHTML=
+ `<b>🌾 ${name}</b><br>Mapato: TSh ${revenue.toLocaleString()}<br>
+ Gharama: TSh ${cost.toLocaleString()}<br>
+ <strong>Faida: TSh ${profit.toLocaleString()}</strong><br>
+ Margin: ${margin.toFixed(1)}%`;
+}
+
+function postProduct(){
+ const p=document.getElementById('product').value, q=document.getElementById('quantity').value, pr=document.getElementById('price').value, pl=document.getElementById('place').value;
+ if(!p||!q||!pr||!pl){alert('Jaza taarifa zote.');return;}
+ const phone=document.getElementById('sellerPhone').value.trim();
+ if(!phone){alert('Weka namba ya simu ya mawasiliano.');return;}
+ const data=JSON.parse(localStorage.getItem('hoodMarket')||'[]');
+ data.unshift({p,q,pr,pl,phone});
+ localStorage.setItem('hoodMarket',JSON.stringify(data));
+ renderMarket();
+}
+function renderMarket(){
+ const data=JSON.parse(localStorage.getItem('hoodMarket')||'[]');
+ const search=(document.getElementById('marketSearch')?.value||'').toLowerCase().trim();
+ const filtered=data.filter(x=>(x.p+' '+x.pl).toLowerCase().includes(search));
+ const box=document.getElementById('list');
+ if(!filtered.length){box.innerHTML='<div class="result" style="display:block">Hakuna tangazo linalolingana na utafutaji.</div>';return;}
+ box.innerHTML=filtered.map(x=>`<div class="card">
+ <b>🌾 ${x.p}</b><br>
+ 📦 ${x.q}<br>
+ 💰 TSh ${Number(x.pr).toLocaleString()} kwa unit<br>
+ 📍 ${x.pl}<br>
+ 📞 <a href="tel:${x.phone}" style="color:#176b35;font-weight:bold">${x.phone}</a>
+ </div>`).join('');
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://kjhcjinowhsgatergetn.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ohyU2PgE3pdN2Pqrv6UaDg_SZQF7HEW';
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+
+function setAppVisible(visible){
+  document.querySelector('main').style.display = visible ? '' : 'none';
+  document.querySelector('nav').style.display = visible ? '' : 'none';
+  document.getElementById('page-auth').style.display = visible ? 'none' : 'block';
+  if(visible) show('home');
+}
+function showAuthStatus(msg, ok=false){
+  const el=document.getElementById('authStatus');
+  if(!el) return;
+  el.innerHTML='<div class="result" style="display:block;border-left-color:'+(ok?'#2e7d32':'#c62828')+'">'+msg+'</div>';
+}
+function showAuthMode(mode){
+  const reg=mode==='register';
+  document.getElementById('registerBox').style.display=reg?'block':'none';
+  document.getElementById('loginBox').style.display=reg?'none':'block';
+  document.getElementById('registerTab').className=reg?'':'secondary';
+  document.getElementById('loginTab').className=reg?'secondary':'';
+  document.getElementById('authStatus').innerHTML='';
+}
+async function registerUser(){
+  const name=document.getElementById('authName').value.trim();
+  const email=document.getElementById('authEmail').value.trim();
+  const password=document.getElementById('authPassword').value;
+  const password2=document.getElementById('authPassword2').value;
+  const role=document.getElementById('authRole').value;
+  if(!name||!email||!password||!password2){showAuthStatus('⚠️ Tafadhali jaza taarifa zote.');return;}
+  if(password.length<6){showAuthStatus('⚠️ Password iwe na angalau herufi 6.');return;}
+  if(password!==password2){showAuthStatus('⚠️ Password mbili hazifanani.');return;}
+  showAuthStatus('⏳ Inafungua akaunti... ',true);
+  const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{full_name:name,role:role}}});
+  if(error){showAuthStatus('❌ '+error.message);return;}
+  if(data.session){
+    localStorage.setItem('hoodRole',role);
+    showAuthStatus('✅ Akaunti imefunguliwa. Karibu Hood Shambani!',true);
+    setAppVisible(true);
+    return;
+  }
+  showAuthStatus('✅ Akaunti imetengenezwa. Angalia email yako kuthibitisha akaunti, kisha ingia.',true);
+  showAuthMode('login');
+  document.getElementById('loginEmail').value=email;
+}
+async function loginUser(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const password=document.getElementById('loginPassword').value;
+  if(!email||!password){showAuthStatus('⚠️ Weka email na password.');return;}
+  showAuthStatus('⏳ Inaingia... ',true);
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error){showAuthStatus('❌ '+error.message);return;}
+  const role=data.user?.user_metadata?.role||'Mkulima';
+  localStorage.setItem('hoodRole',role);
+  showAuthStatus('✅ Umeingia. Karibu Hood Shambani!',true);
+  setAppVisible(true);
+}
+async function logoutUser(){
+  const {error}=await supabaseClient.auth.signOut();
+  if(error){alert('Imeshindikana kutoka: '+error.message);return;}
+  localStorage.removeItem('hoodRole');
+  setAppVisible(false);
+  showAuthMode('login');
+  showAuthStatus('Umetoka kwenye akaunti.',true);
+}
+async function initAuth(){
+  const {data}=await supabaseClient.auth.getSession();
+  if(data.session){
+    const role=data.session.user?.user_metadata?.role||'Mkulima';
+    localStorage.setItem('hoodRole',role);
+    setAppVisible(true);
+  }else{
+    setAppVisible(false);
+    showAuthMode('register');
+  }
+  supabaseClient.auth.onAuthStateChange((_event,session)=>{
+    if(session) setAppVisible(true); else setAppVisible(false);
+  });
+}
+document.addEventListener('DOMContentLoaded',initAuth);
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const box = document.getElementById('installBox');
+  if (box) box.style.display = 'block';
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredInstallPrompt = null;
+  const box = document.getElementById('installBox');
+  if (box) box.style.display = 'none';
+});
+
+async function installHoodApp(){
+  if(!deferredInstallPrompt){
+    showAuthStatus('📲 Kama kitufe cha install hakijafunguka, tumia menu ya browser kisha chagua "Install app" au "Add to Home screen".', true);
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  const choice = await deferredInstallPrompt.userChoice;
+  if(choice.outcome !== 'accepted'){
+    showAuthStatus('Umeghairi usakinishaji wa Hood Shambani.', false);
+  }
+  deferredInstallPrompt = null;
+}
+
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW:', err));
+  });
+}
+</script>
+
+</body>
+</html>
