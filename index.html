@@ -510,17 +510,45 @@ console.log("HOOD USER ID:", user.id);
  `<b>✅ Taarifa zimehifadhiwa online, ${data.jina_la_mkulima} 👋</b><br>📍 ${data.kijiji}, ${data.wilaya}, ${data.mkoa}<br>🌱 ${data.zao_kuu}`;
 }
 async function loadProfile(){
- const user=(await supabaseClient.auth.getUser()).data.user;
- if(!user)return;
- const {data,error}=await supabaseClient.from('wakulima').select('jina_la_mkulima,namba_ya_simu,mkoa,wilaya,kijiji,zao_kuu').eq('user_id',user.id).maybeSingle();
- if(error||!data)return;
- document.getElementById('farmerName').value=data.jina_la_mkulima||'';
- document.getElementById('phone').value=data.namba_ya_simu||'';
- document.getElementById('region').value=data.mkoa||'';
- document.getElementById('district').value=data.wilaya||'';
- document.getElementById('village').value=data.kijiji||'';
- document.getElementById('farmingType').value=data.zao_kuu||'-- Chagua --';
+  try {
+    const { data: userData, error: userError } =
+      await supabaseClient.auth.getUser();
+
+    if (userError) throw userError;
+
+    const user = userData.user;
+
+    if (!user) return;
+
+    const { data, error } =
+      await supabaseClient
+        .from('wakulima')
+        .select('jina_la_mkulima,namba_ya_simu,mkoa,wilaya,kijiji,zao_kuu')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+    if (error) {
+      console.error("LOAD PROFILE ERROR:", error);
+      return;
+    }
+
+    if (!data) {
+      console.log("Hakuna profile iliyopatikana.");
+      return;
+    }
+
+    document.getElementById('farmerName').value = data.jina_la_mkulima || '';
+    document.getElementById('phone').value = data.namba_ya_simu || '';
+    document.getElementById('region').value = data.mkoa || '';
+    document.getElementById('district').value = data.wilaya || '';
+    document.getElementById('village').value = data.kijiji || '';
+    document.getElementById('farmingType').value = data.zao_kuu || '-- Chagua --';
+
+  } catch (error) {
+    console.error("PROFILE LOAD ERROR:", error);
+  }
 }
+
 loadProfile();
 
 function calcProfit(){
