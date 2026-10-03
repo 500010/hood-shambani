@@ -465,8 +465,22 @@ function deleteFarm(i){
 renderFarms();
 
 async function saveProfile(){
- const user=(await supabaseClient.auth.getUser()).data.user;
- if(!user){alert('Tafadhali ingia kwanza kwenye akaunti yako.');return;}
+ const { data: userData, error: userError } =
+  await supabaseClient.auth.getUser();
+
+if (userError) {
+  alert("Tatizo la akaunti: " + userError.message);
+  return;
+}
+
+const user = userData.user;
+
+if (!user) {
+  alert("Tafadhali ingia kwanza kwenye akaunti yako.");
+  return;
+}
+
+console.log("HOOD USER ID:", user.id);
  const data={
   user_id:user.id,
   jina_la_mkulima:document.getElementById('farmerName').value.trim(),
