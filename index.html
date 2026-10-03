@@ -467,6 +467,10 @@ renderFarms();
 async function saveProfile(){
  const { data: userData, error: userError } =
   await supabaseClient.auth.getUser();
+alert(
+  "USER: " + (userData.user ? userData.user.id : "HAIPO") +
+  "\nERROR: " + (userError ? userError.message : "HAKUNA")
+);  
 
 if (userError) {
   alert("Tatizo la akaunti: " + userError.message);
