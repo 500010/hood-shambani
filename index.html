@@ -550,8 +550,10 @@ async function loadProfile(){
     console.error("PROFILE LOAD ERROR:", error);
   }
 }
-alert("LOAD PROFILE INAITWA");
-loadProfile();
+window.addEventListener('load', () => {
+  alert("PAGE IMELOADED");
+  loadProfile();
+});
 
 function calcProfit(){
  const name=document.getElementById('cropName').value;
